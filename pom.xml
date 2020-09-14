@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.duosecurity</groupId>
+  <artifactId>duo-universal-atlassian</artifactId>
+  <version>2.0.0</version>
+  <packaging>pom</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <name>Duo Security's Atlassian JIRA or Confluence plugin</name>
+  <description>Two Factor Authentication for Atlassian JIRA or Confluence</description>
+
+  <modules>
+    <module>duo_seraph_filter</module>
+  </modules>
+</project>
