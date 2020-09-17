@@ -38,7 +38,7 @@ class DoFilterTest {
   private String duoHealthCheckError = "Failclosed for user: null";
   private String stateGood = "goodstategoodstategoodstategoods";
   private String stateBad = "badstatebadstatebadstatebadstate";
-  private String codeGood = "goodcodegoodcodegoodcodegoodcode";
+  private String duoCodeGood = "goodcodegoodcodegoodcodegoodcode";
   private String username = "Mama Gorg";
 
   private Map<String, String> defaultInitParameters = new HashMap<String, String> () {{
@@ -227,7 +227,7 @@ class DoFilterTest {
     // On our second pass through the plugin if the states are not equal then redirect to the prompt and try another auth
     Mockito.when(session.getAttribute(duoAuthFilterSpy.DUO_SAVED_STATE_KEY)).thenReturn(stateGood);
     Mockito.when(request.getParameter("state")).thenReturn(stateBad);
-    Mockito.when(request.getParameter("code")).thenReturn(codeGood);
+    Mockito.when(request.getParameter("duo_code")).thenReturn(duoCodeGood);
     Mockito.doReturn(true).when(duoAuthFilterSpy).duoHealthCheck(anyString());
 
     duoAuthFilterSpy.doFilter(request, response, chain);
@@ -239,7 +239,7 @@ class DoFilterTest {
   void stateExistsCodeNullTest()
   throws java.io.IOException, javax.servlet.ServletException {
     // On our second pass through:
-    // Verify that if the code is null even if the state exists we redirect to the prompt and try another auth
+    // Verify that if the duo_code is null even if the state exists we redirect to the prompt and try another auth
     Mockito.when(session.getAttribute(duoAuthFilterSpy.DUO_SAVED_STATE_KEY)).thenReturn(stateGood);
     Mockito.when(request.getParameter("state")).thenReturn(stateGood);
     Mockito.doReturn(true).when(duoAuthFilterSpy).duoHealthCheck(anyString());
@@ -276,8 +276,8 @@ class DoFilterTest {
     // Verify that if the token is null then we redirect to the prompt and try another auth
     Mockito.when(session.getAttribute(duoAuthFilterSpy.DUO_SAVED_STATE_KEY)).thenReturn(stateGood);
     Mockito.when(request.getParameter("state")).thenReturn(stateGood);
-    Mockito.when(request.getParameter("code")).thenReturn(codeGood);
-    Mockito.doReturn(null).when(duoAuthFilterSpy).exchangeDuoToken(session, codeGood, "username");
+    Mockito.when(request.getParameter("duo_code")).thenReturn(duoCodeGood);
+    Mockito.doReturn(null).when(duoAuthFilterSpy).exchangeDuoToken(session, duoCodeGood, "username");
 
     duoAuthFilterSpy.doFilter(request, response, chain);
 
@@ -290,9 +290,9 @@ class DoFilterTest {
     Token token = Mockito.mock(Token.class);
     Mockito.when(session.getAttribute(duoAuthFilterSpy.DUO_SAVED_STATE_KEY)).thenReturn(stateGood);
     Mockito.when(request.getParameter("state")).thenReturn(stateGood);
-    Mockito.when(request.getParameter("code")).thenReturn(codeGood);
+    Mockito.when(request.getParameter("duo_code")).thenReturn(duoCodeGood);
     Mockito.when(session.getAttribute(duoAuthFilterSpy.DUO_ORIGINAL_URL_KEY)).thenReturn(originalUrl);
-    Mockito.doReturn(token).when(duoAuthFilterSpy).exchangeDuoToken(session, codeGood, username);
+    Mockito.doReturn(token).when(duoAuthFilterSpy).exchangeDuoToken(session, duoCodeGood, username);
 
     duoAuthFilterSpy.doFilter(request, response, chain);
 

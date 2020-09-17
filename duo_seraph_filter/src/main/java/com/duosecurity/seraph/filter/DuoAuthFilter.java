@@ -91,7 +91,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
   /**
    * Check to see if we are in the callback after the prompt.
    *
-   * @param duoCode  The code returned from Duo after the prompt
+   * @param duoCode  The duo_code returned from Duo after the prompt
    * @param duoState The state returned from Duo after the prompt
    *
    * @return If this is the response after the prompt then return true, otherwise return false
@@ -134,7 +134,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
    * Check the token from Duo exists and the auth was successful.
    *
    * @param token Contains contextual information about the auth.
-   *                This was given by Duo in exchange for the code
+   *                This was given by Duo in exchange for the duo_code
    * @param username The username we expect to have authenticated
    *
    * @return If the token exists and the auth was successful for the expected user, return true;
@@ -149,7 +149,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
    * and reports a successful auth.
    * 
    * @param token Contains contextual information about the auth.
-   *                This was given by Duo in exchange for the code
+   *                This was given by Duo in exchange for the duo_code
    * 
    * @return true if the token exists, is correctly structured, and indicates a successful auth;
    *         false otherwise
@@ -164,7 +164,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
    * Check the token's authenticated username to make sure it matches the expected username.
    * 
    * @param token Contains contextual information about the auth.
-   *                This was given by Duo in exchange for the code
+   *                This was given by Duo in exchange for the duo_code
    * @param username The username we expect to have authenticated
    * 
    * @return true if the token exists, has an authenticated principal,
@@ -227,11 +227,11 @@ public class DuoAuthFilter implements javax.servlet.Filter {
   }
 
   /**
-   * Exchange the code returned from Duo for a token that contains contextual information
+   * Exchange the duo_code returned from Duo for a token that contains contextual information
    * about the auth.
    *
    * @param session The http session for the request
-   * @param duoCode  The code returned from Duo after the prompt
+   * @param duoCode  The duo_code returned from Duo after the prompt
    * @param username The username we expect to have authenticated
    *
    * @return If we need to reauth because of an invalid token return null
@@ -297,7 +297,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
         if (session.getAttribute(DUO_AUTH_SUCCESS_KEY) == null) {
           // There has not been a successful Duo auth
           try {
-            String duoCode = httpServletRequest.getParameter("code");
+            String duoCode = httpServletRequest.getParameter("duo_code");
             String duoState = httpServletRequest.getParameter("state");
             String duoSavedState = (String) session.getAttribute(DUO_SAVED_STATE_KEY);
             // Check to see if we are in the response after the prompt
