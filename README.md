@@ -5,19 +5,14 @@ Duo two-factor authentication plugin for Jira and Confluence with Duo Universal 
 
 ## Usage
 Installation documents:
-
-[comment]: # (Change the doc link once created)
-
-- Confluence: https://duo.com/docs/confluence
-- Jira: https://duo.com/docs/jira
+- Confluence: https://duo.com/docs/confluence-universal
+- Jira: https://duo.com/docs/jira-universal
 
 ## Development Prerequisites
 The following are steps for the open source community to build and contribute to this plugin.
  - Install the [Atlassian SDK](https://developer.atlassian.com/server/framework/atlassian-sdk/install-the-atlassian-sdk-on-a-linux-or-mac-system/)
  - A working Java environment (Tested with Java 8)
- - The Duo Universal Prompt repository for the Java language `duo_universal_java`
-
-[comment]: # (Link the duo_universal_java repo from github once created)
+ - The Duo Universal Prompt repository for the Java language [`duo_universal_java`](https://github.com/duosecurity/duo_universal_java)
 
 ## Development Installation
 
