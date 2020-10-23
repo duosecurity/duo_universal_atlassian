@@ -42,7 +42,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
   protected ArrayList<String> unprotectedDirs;
   protected boolean apiBypassEnabled = false;
   protected boolean failOpen = true;
-  private static final String USER_AGENT_LIB = "duo_atlassian_plugin";
+  private static final String USER_AGENT_LIB = "duo_universal_atlassian";
   private static final String USER_AGENT_VERSION = "2.0.0";
 
   /**
