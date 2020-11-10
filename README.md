@@ -1,6 +1,11 @@
 # Duo Atlassian Plugin
 ## Overview
 
+[![Issues](https://img.shields.io/github/issues/duosecurity/duo_universal_atlassian)](https://github.com/duosecurity/duo_universal_atlassian/issues)
+[![Forks](https://img.shields.io/github/forks/duosecurity/duo_universal_atlassian)](https://github.com/duosecurity/duo_universal_atlassian/network/members)
+[![Stars](https://img.shields.io/github/stars/duosecurity/duo_universal_atlassian)](https://github.com/duosecurity/duo_universal_atlassian/stargazers)
+[![License](https://img.shields.io/badge/License-View%20License-orange)](https://github.com/duosecurity/duo_universal_atlassian/blob/master/LICENSE)
+
 Duo two-factor authentication plugin for Jira and Confluence with Duo Universal Prompt .
 
 ## Usage
