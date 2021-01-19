@@ -1,0 +1,65 @@
+name: Build, test and create release artifact
+on:
+  workflow_dispatch:
+    inputs:
+      pluginVersion:
+        description: 'Tagged Version: (E.g. 2.0.1)'
+        required: true
+
+jobs:
+   build-and-test:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v2
+       - name: Set up Java
+         uses: actions/setup-java@v1
+         with:
+           java-version: 1.8
+
+       # Per https://developer.atlassian.com/server/framework/atlassian-sdk/install-the-atlassian-sdk-on-a-linux-or-mac-system/
+       - name: Install Atlassian SDK
+         run: |
+           sudo sh -c 'echo "deb https://packages.atlassian.com/debian/atlassian-sdk-deb/ stable contrib" >>/etc/apt/sources.list'
+           wget https://packages.atlassian.com/api/gpg/key/public
+           sudo apt-key add public
+           sudo apt-get update
+           sudo apt-get install -y atlassian-plugin-sdk
+
+       - name: Build and test with Maven
+         run: atlas-mvn clean package
+
+       - name: Get Artifact Name
+         # Extract the git tag version and use it to set a variable for artifact name
+         id: get_artifact_name
+         run: echo ::set-output name=ARTIFACT_NAME::duo_universal_atlassian_plugin-${{ github.event.inputs.pluginVersion }}
+
+       - name: Create zip package
+         # We can't use upload-artifact to create the zip because that zip isn't accessible to other actions, only via web/api download.
+         # Move all of the files we want into their own directory for easy zipping
+         run: |
+           mkdir -p ${{ steps.get_artifact_name.outputs.ARTIFACT_NAME }}/etc
+           mv install.py README.md LICENSE ${{ steps.get_artifact_name.outputs.ARTIFACT_NAME }}
+           mv duo_seraph_filter/target/duo-filter-*-jar-with-dependencies.jar ${{ steps.get_artifact_name.outputs.ARTIFACT_NAME }}/etc
+           zip -r ${{ steps.get_artifact_name.outputs.ARTIFACT_NAME }}.zip ${{ steps.get_artifact_name.outputs.ARTIFACT_NAME }}
+
+       - name: Create Release
+         id: create_release
+         uses: actions/create-release@v1
+         env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         with:
+           tag_name: ${{ github.event.inputs.pluginVersion }}
+           release_name: Release ${{ github.event.inputs.pluginVersion }}
+           draft: true
+           prerelease: false
+
+       - name: Upload Release Asset
+         id: upload-release-asset
+         uses: actions/upload-release-asset@v1
+         env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         with:
+           upload_url: ${{ steps.create_release.outputs.upload_url }}
+           asset_path: ${{ steps.get_artifact_name.outputs.ARTIFACT_NAME }}.zip
+           asset_name: ${{ steps.get_artifact_name.outputs.ARTIFACT_NAME }}.zip
+           asset_content_type: application/zip
