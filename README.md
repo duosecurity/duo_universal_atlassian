@@ -10,8 +10,8 @@ Duo two-factor authentication plugin for Jira and Confluence with Duo Universal 
 
 ## Usage
 Installation documents:
-- Confluence: https://duo.com/docs/confluence-universal
-- Jira: https://duo.com/docs/jira-universal
+- Confluence: https://duo.com/docs/confluence
+- Jira: https://duo.com/docs/jira
 
 ## Development Prerequisites
 The following are steps for the open source community to build and contribute to this plugin.
