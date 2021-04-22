@@ -30,7 +30,6 @@ class ExchangeDuoTokenTest {
     session = Mockito.mock(HttpSession.class);
     duoAuthFilter.duoClient = Mockito.mock(Client.class);
     Mockito.doReturn(authResult).when(token).getAuth_result();
-    Mockito.doReturn(tokenUsername).when(token).getSub();
   }
 
   @Test
@@ -62,30 +61,6 @@ class ExchangeDuoTokenTest {
     Mockito.when(authResult.getStatus()).thenReturn("FAIL");
 
     assertNull(duoAuthFilter.exchangeDuoToken(session, duoCode, tokenUsername));
-  }
-
-  @Test
-  void exchangeTokenNullExpectedUsernameFailTest() throws DuoException {
-    Mockito.when(duoAuthFilter.duoClient.exchangeAuthorizationCodeFor2FAResult(anyString(), anyString())).thenReturn(token);
-    Mockito.when(authResult.getStatus()).thenReturn("ALLOW");
-
-    assertNull(duoAuthFilter.exchangeDuoToken(session, duoCode, null));
-  }
-
-  @Test
-  void exchangeTokenBlankExpectedUsernameFailTest() throws DuoException {
-    Mockito.when(duoAuthFilter.duoClient.exchangeAuthorizationCodeFor2FAResult(anyString(), anyString())).thenReturn(token);
-    Mockito.when(authResult.getStatus()).thenReturn("ALLOW");
-
-    assertNull(duoAuthFilter.exchangeDuoToken(session, duoCode, ""));
-  }
-
-  @Test 
-  void exchangeTokenUsernameMismatchFailTest() throws DuoException {
-    Mockito.when(duoAuthFilter.duoClient.exchangeAuthorizationCodeFor2FAResult(anyString(), anyString())).thenReturn(token);
-    Mockito.when(authResult.getStatus()).thenReturn("ALLOW");
-
-    assertNull(duoAuthFilter.exchangeDuoToken(session, duoCode, "not"+tokenUsername));
   }
 
   @Test

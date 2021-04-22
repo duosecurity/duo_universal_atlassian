@@ -131,20 +131,6 @@ public class DuoAuthFilter implements javax.servlet.Filter {
   }
 
   /**
-   * Check the token from Duo exists and the auth was successful.
-   *
-   * @param token Contains contextual information about the auth.
-   *                This was given by Duo in exchange for the duo_code
-   * @param username The username we expect to have authenticated
-   *
-   * @return If the token exists and the auth was successful for the expected user, return true;
-   *         otherwise return false
-   */
-  private static boolean validateToken(Token token, String username) {
-    return validateTokenAuthResult(token) && validateUsersMatch(token, username);
-  }
-
-  /**
    * Check the token's auth result to make sure it's correctly provided
    * and reports a successful auth.
    * 
@@ -158,23 +144,6 @@ public class DuoAuthFilter implements javax.servlet.Filter {
     return token != null
            && token.getAuth_result() != null
            && "ALLOW".equalsIgnoreCase(token.getAuth_result().getStatus());
-  }
-
-  /**
-   * Check the token's authenticated username to make sure it matches the expected username.
-   * 
-   * @param token Contains contextual information about the auth.
-   *                This was given by Duo in exchange for the duo_code
-   * @param username The username we expect to have authenticated
-   * 
-   * @return true if the token exists, has an authenticated principal,
-   *         and it matches the expected username; false otherwise
-   */
-  private static boolean validateUsersMatch(Token token, String username) {
-    return token != null
-           && username != null
-           && !"".equals(username)
-           && username.equals(token.getSub());
   }
 
   /**
@@ -240,7 +209,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
   protected Token exchangeDuoToken(HttpSession session, String duoCode, String username) {
     try {
       Token token = duoClient.exchangeAuthorizationCodeFor2FAResult(duoCode, username);
-      if (!validateToken(token, username)) {
+      if (!validateTokenAuthResult(token)) {
         throw new ServletException("Duo Token is not valid");
       }
       return token;
