@@ -43,7 +43,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
   protected boolean apiBypassEnabled = false;
   protected boolean failOpen = true;
   private static final String USER_AGENT_LIB = "duo_universal_atlassian";
-  private static final String USER_AGENT_VERSION = "2.0.2";
+  private static final String USER_AGENT_VERSION = "2.0.3";
 
   /**
    * Return true if url should not be protected by Duo auth, even if we have
