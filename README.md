@@ -1,6 +1,6 @@
 # Duo Atlassian Plugin
 ## Overview
-
+[![Build Status](https://github.com/duosecurity/duo_universal_atlassian/actions/workflows/java-ci.yml/badge.svg)](https://github.com/duosecurity/duo_universal_atlassian/actions/workflows/java-ci.yml)
 [![Issues](https://img.shields.io/github/issues/duosecurity/duo_universal_atlassian)](https://github.com/duosecurity/duo_universal_atlassian/issues)
 [![Forks](https://img.shields.io/github/forks/duosecurity/duo_universal_atlassian)](https://github.com/duosecurity/duo_universal_atlassian/network/members)
 [![Stars](https://img.shields.io/github/stars/duosecurity/duo_universal_atlassian)](https://github.com/duosecurity/duo_universal_atlassian/stargazers)
