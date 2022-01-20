@@ -8,10 +8,12 @@
 
 Duo two-factor authentication plugin for Jira and Confluence with Duo Universal Prompt .
 
-## Compatibility Note
+## Compatibility Notes
 
-Certain Confluence plugin combinations can result in Jackson dependency conflicts with the duo_universal_atlassian plugin.
+- Certain Confluence plugin combinations can result in Jackson dependency conflicts with the duo_universal_atlassian plugin.
 Please use [this modified release](https://github.com/jeffreyparker/duo_universal_atlassian/releases/tag/2.0.3.1) if you encounter jar dependency errors in Confluence.
+
+- Confluence 7.14.1 and later include a significantly different and minimal `web.xml` file. For these versions, you can insert the Duo `<filter>` and `<filter-mapping>` sections *anywhere* within the main `web-app` block.
 
 ## Usage
 Installation documents:
