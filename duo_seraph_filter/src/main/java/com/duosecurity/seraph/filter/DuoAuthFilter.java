@@ -97,6 +97,8 @@ public class DuoAuthFilter implements javax.servlet.Filter {
    * @return If this is the response after the prompt then return true, otherwise return false
    */
   private static boolean callbackAfterPrompt(String duoCode, String duoState) {
+    // Step 0: determine if this is the initial call to the plugin, or the second
+    log.debug("DuoAuthFilter callback check");
     if (duoCode != null && duoState != null) {
       return true;
     }
@@ -124,10 +126,19 @@ public class DuoAuthFilter implements javax.servlet.Filter {
    *           otherwise return false
    */
   private static boolean validateState(String duoState, String duoSavedState) {
-    if (duoSavedState != null && duoState.equals(duoSavedState)) {
-      return true;
+    // Step 4: Make sure the state saved is the same as the state returned from Duo
+    // during the redirect back from the prompt
+    if (duoSavedState == null) {
+      log.error("No saved state found in user session, but one was expected.");
+      return false;
     }
-    return false;
+    
+    if (!duoState.equals(duoSavedState)) {
+      log.warn("Session saved state and state provided by Duo do not match.");
+      return false;
+    }
+    
+    return true;
   }
 
   /**
@@ -182,6 +193,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
       HealthCheckResponse healthCheckResponse = duoClient.healthCheck();
       // The healthCheckResponse status will be "FAIL" if Duo is not available
       if (healthCheckResponse == null || "FAIL".equalsIgnoreCase(healthCheckResponse.getStat())) {
+        log.warn("Duo is not healthy, invoking failmode");
         throw new ServletException(DUO_FAILCLOSED);
       }
     } catch (Exception e) {
@@ -231,8 +243,11 @@ public class DuoAuthFilter implements javax.servlet.Filter {
     if (!httpServletResponse.isCommitted()) {
       try {
         // Step 2: Generate and save a state
+        log.debug("DuoAuthFilter Step 2");
         String duoSessionState = generateDuoState(session);
+
         // Step 3: Create a url and use it to redirect to the prompt
+        log.debug("DuoAuthFilter Step 3");
         String duoRedirect = duoClient.createAuthUrl(principal.getName(), duoSessionState);
         httpServletResponse.sendRedirect(duoRedirect);
       } catch (Exception e) {
@@ -270,10 +285,9 @@ public class DuoAuthFilter implements javax.servlet.Filter {
             String duoState = httpServletRequest.getParameter("state");
             String duoSavedState = (String) session.getAttribute(DUO_SAVED_STATE_KEY);
             // Check to see if we are in the response after the prompt
-            // Step 4: Make sure the state saved is the same as the state returned from Duo
-            // during the redirect back from the prompt
             if (!callbackAfterPrompt(duoCode, duoState)
                 || !validateState(duoState, duoSavedState)) {
+              log.debug("DuoAuthFilter Step 1");
               //Save the original URL to redirect to after a successful auth
               constructOriginalUrl(httpServletRequest, session);
               // Step 1: We have not had a successful auth with Duo yet
@@ -284,11 +298,13 @@ public class DuoAuthFilter implements javax.servlet.Filter {
                 redirectDuoPrompt(principal, session, httpServletResponse);
                 return;
               } else {
+                log.debug("Duo failing open");
                 // If Duo is down and we have our failmode to fail open
                 // Set our auth success key to true and invoke next chain in the filter
                 session.setAttribute(DUO_AUTH_SUCCESS_KEY, true);
               }
             } else {
+              log.debug("DuoAuthFilter Step 5");
               // Step 5: If this is part of the callback from Duo and the states are equal
               // then exchange the code for the auth token and log the token
               // If the token was successfully exchanged and decoded
@@ -308,6 +324,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
               return;
             }
           } catch (Exception e) {
+            log.error(e);
             throw new ServletException(e);
           }
         } // user has already authed with us this session
@@ -316,6 +333,7 @@ public class DuoAuthFilter implements javax.servlet.Filter {
     } // There is gadget health check running
 
     // Step 6: Invoke next filter in the chain
+    log.debug("DuoAuthFilter Step 6");
     chain.doFilter(request, response);
   }
 
