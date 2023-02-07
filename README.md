@@ -20,6 +20,10 @@ Installation documents:
 - Confluence: https://duo.com/docs/confluence
 - Jira: https://duo.com/docs/jira
 
+## TLS 1.2 and 1.3 Support
+
+Duo_universal_atlassian uses the Java cryptography libraries for TLS operations. Both TLS 1.2 and 1.3 are supported by Java 8 and later versions.
+
 ## Development Prerequisites
 The following are steps for the open source community to build and contribute to this plugin.
  - Install the [Atlassian SDK](https://developer.atlassian.com/server/framework/atlassian-sdk/install-the-atlassian-sdk-on-a-linux-or-mac-system/)
