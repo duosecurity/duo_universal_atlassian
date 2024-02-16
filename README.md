@@ -1,3 +1,11 @@
+# Deprecation Notice
+
+This repository is deprecated by Duo Security, since Atlassian has [ended support](https://www.atlassian.com/migration/assess/journey-to-cloud) for the on-premises Jira and Confluence Server products.  The repository will remain public and visible, and integrations built using this repository's code will continue to work.  You can also continue to fork, clone, or pull from this repository.
+
+However, Duo will not provide any further releases or enhancements.
+
+For cloud-based Atlassian products, Duo recommends its [SSO](https://duo.com/docs/sso-atlassian-cloud) solution for multifactor authentication.
+
 # Duo Atlassian Plugin
 ## Overview
 [![Build Status](https://github.com/duosecurity/duo_universal_atlassian/actions/workflows/java-ci.yml/badge.svg)](https://github.com/duosecurity/duo_universal_atlassian/actions/workflows/java-ci.yml)
